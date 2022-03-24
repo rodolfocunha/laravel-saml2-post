@@ -9,7 +9,7 @@
   ],
   "homepage": "https://github.com/rodolfocunha/laravel-saml2-post",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "rodolfocunha",
@@ -19,7 +19,8 @@
   "require": {
     "php": ">=7.3",
     "illuminate/support": ">=5.0.0",
-    "onelogin/php-saml": "^3.6.1"
+    "onelogin/php-saml": "^3.6.1",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "mockery/mockery": "0.9.*"
