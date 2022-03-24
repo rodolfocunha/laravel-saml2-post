@@ -25,6 +25,37 @@ class Saml2Auth
         $this->auth = $auth;
     }
 
+    public static function loadOneLoginAuthFromIpdConfig()
+    {
+        $config = config('saml2_settings');
+
+        if (is_null($config)) {
+            throw new \InvalidArgumentException('is not a valid IdP.');
+        }
+
+        if (empty($config['sp']['entityId'])) {
+            $config['sp']['entityId'] = URL::route('saml_metadata');
+        }
+        if (empty($config['sp']['assertionConsumerService']['url'])) {
+            $config['sp']['assertionConsumerService']['url'] = URL::route('saml_acs');
+        }
+        if (!empty($config['sp']['singleLogoutService']) &&
+            empty($config['sp']['singleLogoutService']['url'])) {
+            $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
+        }
+        if (strpos($config['sp']['privateKey'], 'file://')===0) {
+            $config['sp']['privateKey'] = static::extractPkeyFromFile($config['sp']['privateKey']);
+        }
+        if (strpos($config['sp']['x509cert'], 'file://')===0) {
+            $config['sp']['x509cert'] = static::extractCertFromFile($config['sp']['x509cert']);
+        }
+        if (strpos($config['idp']['x509cert'], 'file://')===0) {
+            $config['idp']['x509cert'] = static::extractCertFromFile($config['idp']['x509cert']);
+        }
+
+        return new Auth($config);
+    }
+
     /**
      * @return bool if a valid user was fetched from the saml assertion this request.
      */
@@ -153,5 +184,32 @@ class Saml2Auth
      */
     function getLastErrorReason() {
         return $this->auth->getLastErrorReason();
+    }
+
+    protected function extractPkeyFromFile($path) {
+        $res = openssl_get_privatekey($path);
+        if (empty($res)) {
+            throw new \Exception('Could not read private key-file at path \'' . $path . '\'');
+        }
+        openssl_pkey_export($res, $pkey);
+        openssl_pkey_free($res);
+        return $this->extractOpensslString($pkey, 'PRIVATE KEY');
+    }
+
+    protected function extractCertFromFile($path) {
+        $res = openssl_x509_read(file_get_contents($path));
+        if (empty($res)) {
+            throw new \Exception('Could not read X509 certificate-file at path \'' . $path . '\'');
+        }
+        openssl_x509_export($res, $cert);
+        openssl_x509_free($res);
+        return $this->extractOpensslString($cert, 'CERTIFICATE');
+    }
+
+    protected function extractOpensslString($keyString, $delimiter) {
+        $keyString = str_replace(["\r", "\n"], "", $keyString);
+        $regex = '/-{5}BEGIN(?:\s|\w)+' . $delimiter . '-{5}\s*(.+?)\s*-{5}END(?:\s|\w)+' . $delimiter . '-{5}/m';
+        preg_match($regex, $keyString, $matches);
+        return empty($matches[1]) ? '' : $matches[1];
     }
 }
