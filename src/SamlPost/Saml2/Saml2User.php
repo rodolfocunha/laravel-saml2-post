@@ -2,7 +2,7 @@
 
 namespace SamlPost\Saml2;
 
-use OneLogin_Saml2_Auth;
+use OneLogin\Saml2\Auth;
 
 /**
  * A simple class that represents the user that 'came' inside the saml2 assertion
@@ -14,7 +14,7 @@ class Saml2User implements \Illuminate\Contracts\Auth\Authenticatable
 
     protected $auth;
 
-    function __construct(OneLogin_Saml2_Auth $auth = null)
+    function __construct(Auth $auth = null)
     {
         $this->auth = $auth;
     }

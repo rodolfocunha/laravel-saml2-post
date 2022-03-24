@@ -2,7 +2,8 @@
 namespace SamlPost\Saml2;
 
 use Illuminate\Support\ServiceProvider;
-use OneLogin_Saml2_Auth;
+use OneLogin\Saml2\Auth;
+use OneLogin\Saml2\Utils;
 use URL;
 
 class Saml2ServiceProvider extends ServiceProvider
@@ -31,7 +32,7 @@ class Saml2ServiceProvider extends ServiceProvider
         ]);
 
         if (config('saml2_settings.proxyVars', false)) {
-            \OneLogin_Saml2_Utils::setProxyVars(true);
+            Utils::setProxyVars(true);
         }
 
         // Set SAML POST URI config
@@ -51,14 +52,14 @@ class Saml2ServiceProvider extends ServiceProvider
 
         $this->app->singleton('SamlPost\Saml2\Saml2Auth', function ($app) {
 
-            return new \SamlPost\Saml2\Saml2Auth($app['OneLogin_Saml2_Auth']);
+            return new \SamlPost\Saml2\Saml2Auth($app['OneLogin\Saml2\Auth']);
         });
 
     }
 
     protected function registerOneLoginInContainer()
     {
-        $this->app->singleton('OneLogin_Saml2_Auth', function ($app) {
+        $this->app->singleton('OneLogin\Saml2\Auth', function ($app) {
             $config = config('saml2_settings');
             if (empty($config['sp']['entityId'])) {
                 $config['sp']['entityId'] = URL::route('saml_metadata');
@@ -71,7 +72,7 @@ class Saml2ServiceProvider extends ServiceProvider
                 $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
             }
 
-            return new OneLogin_Saml2_Auth($config);
+            return new Auth($config);
         });
     }
 
