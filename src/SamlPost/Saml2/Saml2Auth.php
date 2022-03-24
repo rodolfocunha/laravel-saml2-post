@@ -6,7 +6,7 @@ use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Utils;
 use SamlPost\Saml2\Events\Saml2LogoutEvent;
-
+use URL;
 use Log;
 use Psr\Log\InvalidArgumentException;
 
