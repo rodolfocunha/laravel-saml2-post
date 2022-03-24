@@ -1,38 +1,43 @@
 {
-    "name": "aherstein/laravel-saml2-post",
-    "description": "A Laravel package for Saml2 integration as a SP (service provider) based on OneLogin toolkit, which is much lightweight than simplesamlphp",
-    "keywords": ["laravel","saml", "saml2", "onelogin"],
-    "homepage": "https://github.com/aherstein/laravel-saml2-post",
-    "license": "MIT",
-  "version": "0.15.0",
-    "authors": [
-        {
-            "name": "aherstein",
-            "email": "adam.herstein@icloud.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": ">=5.0.0",
-        "onelogin/php-saml": "^2.10"
-    },
-    "require-dev": {
-        "mockery/mockery": "0.9.*"
-    },
-    "autoload": {
-        "psr-0": {
-            "SamlPost\\Saml2\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "SamlPost\\Saml2\\Saml2ServiceProvider"
-            ],
-            "aliases": {
-                "Saml2": "SamlPost\\Saml2\\Facades\\Saml2Auth"
-            }
-        }
-    },
-    "minimum-stability": "stable"
+  "name": "rodolfocunha/laravel-saml2-post",
+  "description": "A Laravel package for Saml2 integration as a SP (service provider) based on OneLogin toolkit, which is much lightweight than simplesamlphp",
+  "keywords": [
+    "laravel",
+    "saml",
+    "saml2",
+    "onelogin"
+  ],
+  "homepage": "https://github.com/rodolfocunha/laravel-saml2-post",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "rodolfocunha",
+      "email": "rodolfo@headcode.com.br"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "illuminate/support": ">=5.0.0",
+    "onelogin/php-saml": "^3.6.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "0.9.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "SamlPost\\Saml2\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "SamlPost\\Saml2\\Saml2ServiceProvider"
+      ],
+      "aliases": {
+        "Saml2": "SamlPost\\Saml2\\Facades\\Saml2Auth"
+      }
+    }
+  },
+  "minimum-stability": "stable"
 }
